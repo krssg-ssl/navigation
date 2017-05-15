@@ -171,14 +171,15 @@ include_directories(include
                     )
 
 # sources
-set(src 
+set(src
+    src/planners/wrapperc.cpp
     src/planners/mergescurve.cpp
     src/planners/naivepp.cpp
     src/planners/errt.cpp
     src/planners/scurve.cpp
     src/controllers/waypoint.cpp)
 
-add_library(navigation ${src})
+add_library(navigation SHARED ${src})
 target_link_libraries(navigation ${catkin_LIBRARIES})
 
 # for installilng the library so it can be used by other packages
