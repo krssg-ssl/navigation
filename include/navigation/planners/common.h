@@ -5,11 +5,11 @@
 // some common definitions required for all the planners
 namespace Navigation
 {
-  typedef struct
+  struct obstacle
   {
     float x, y, x2, y2;
     float radius;
-  } obstacle;
+  };
   const int MAX_OBSTACLES = 20;
 }
 #endif
