@@ -7,9 +7,14 @@ project(navigation)
 find_package(catkin REQUIRED COMPONENTS
   krssg_ssl_msgs
   ssl_common
+  ssl_robot
   roscpp
   rospy
   std_msgs
+  robojackets
+  genmsg
+  OpenCV
+  OMPL
 )
 
 ## System dependencies are found with CMake's conventions
@@ -177,7 +182,8 @@ set(src
     src/planners/naivepp.cpp
     src/planners/errt.cpp
     src/planners/scurve.cpp
-    src/controllers/waypoint.cpp)
+    src/controllers/waypoint.cpp
+    src/planners/ompl.cpp)
 
 add_library(navigation SHARED ${src})
 target_link_libraries(navigation ${catkin_LIBRARIES})
