@@ -4,6 +4,8 @@ project(navigation)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+
+list(APPEND CMAKE_PREFIX_PATH "$ENV{HOME}/catkin_ws/devel")
 find_package(catkin REQUIRED COMPONENTS
   krssg_ssl_msgs
   geometry_msgs
