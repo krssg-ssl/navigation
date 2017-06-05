@@ -6,23 +6,25 @@ project(navigation)
 ## is used, also find other catkin packages
 
 list(APPEND CMAKE_PREFIX_PATH "$ENV{HOME}/catkin_ws/devel")
+execute_process (
+  COMMAND bash -c "rosversion -d"
+  OUTPUT_VARIABLE ROS_VERSION)
+string(REGEX REPLACE "\n$" "" ROS_VERSION "${ROS_VERSION}")
+set(OMPL_DIR "/opt/ros/${ROS_VERSION}/share/ompl")
 find_package(catkin REQUIRED COMPONENTS
   krssg_ssl_msgs
   geometry_msgs
   ssl_common
-  ssl_robot
   roscpp
   rospy
   std_msgs
   robojackets
   genmsg
-  OpenCV
   OMPL
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed

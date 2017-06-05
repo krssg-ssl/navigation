@@ -24,10 +24,6 @@
 #include <ostream>
 #include <vector>
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/opencv.hpp>
-
 #include "geometry_msgs/Pose2D.h"
 #include "krssg_ssl_msgs/path_data.h"
 #include "krssg_ssl_msgs/obstacle.h"
