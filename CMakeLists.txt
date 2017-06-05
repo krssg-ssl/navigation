@@ -6,6 +6,7 @@ project(navigation)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   krssg_ssl_msgs
+  geometry_msgs
   ssl_common
   ssl_robot
   roscpp
@@ -183,7 +184,7 @@ set(src
     src/planners/errt.cpp
     src/planners/scurve.cpp
     src/controllers/waypoint.cpp
-    src/planners/ompl.cpp)
+    src/planners/ompl_planner.cpp)
 
 add_library(navigation SHARED ${src})
 target_link_libraries(navigation ${catkin_LIBRARIES})

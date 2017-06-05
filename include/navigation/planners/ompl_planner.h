@@ -28,10 +28,31 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
 
+#include "geometry_msgs/Pose2D.h"
+#include "krssg_ssl_msgs/path_data.h"
+#include "krssg_ssl_msgs/obstacle.h"
+#include "ssl_common/geometry.hpp"
+#include "ssl_common/config.h"
+#include "common.h"
 
-namespace ob = ompl::base;
-namespace og = ompl::geometric;
 
-using namespace std;
+class Planner {
+	public:
+		Planner(krssg_ssl_msgs::path_data::Request &request);
+		~Planner();
+
+		bool isStateValid(const ompl::base::State *state);
+		void plan();
+		krssg_ssl_msgs::path_data::Response response;
+
+	private:
+		geometry_msgs::Pose2D start_point;
+		geometry_msgs::Pose2D final_point;
+		std::vector<krssg_ssl_msgs::obstacle> obstacles;
+
+		int botID;
+		static const double step_size = 0.5;
+		int numObstacles; 
+};
 
 #endif
