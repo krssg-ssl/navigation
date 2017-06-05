@@ -36,23 +36,24 @@
 #include "common.h"
 
 
-class Planner {
-	public:
-		Planner(krssg_ssl_msgs::path_data::Request &request);
-		~Planner();
+namespace Navigation {
+	class OMPL_Planner {
+		public:
+			OMPL_Planner(krssg_ssl_msgs::path_data::Request &request);
+			~OMPL_Planner();
 
-		bool isStateValid(const ompl::base::State *state);
-		void plan();
-		krssg_ssl_msgs::path_data::Response response;
+			bool isStateValid(const ompl::base::State *state);
+			krssg_ssl_msgs::path_data::Response& plan();
+			krssg_ssl_msgs::path_data::Response response;
 
-	private:
-		geometry_msgs::Pose2D start_point;
-		geometry_msgs::Pose2D final_point;
-		std::vector<krssg_ssl_msgs::obstacle> obstacles;
+		private:
+			geometry_msgs::Pose2D start_point;
+			geometry_msgs::Pose2D final_point;
+			std::vector<krssg_ssl_msgs::obstacle> obstacles;
 
-		int botID;
-		static const double step_size = 0.5;
-		int numObstacles; 
-};
-
+			int botID;
+			static const double step_size = 0.5;
+			int numObstacles;
+	};
+}
 #endif
