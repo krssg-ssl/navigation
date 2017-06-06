@@ -43,8 +43,8 @@ namespace Navigation {
 		ob::StateSpacePtr space(new ob::SE2StateSpace());
 		ob::RealVectorBounds bounds(2);
 		bounds.setLow(0, -HALF_FIELD_MAXX);
-		bounds.setHigh(0, -HALF_FIELD_MAXY);
-		bounds.setLow(1, HALF_FIELD_MAXX);
+		bounds.setHigh(0, HALF_FIELD_MAXX);
+		bounds.setLow(1, -HALF_FIELD_MAXY);
 		bounds.setHigh(1, HALF_FIELD_MAXY);
 		space->as<ob::SE2StateSpace>()->setBounds(bounds);
 
@@ -60,6 +60,9 @@ namespace Navigation {
 	  	setup.setStartAndGoalStates(start, final);
 
 	  	ob::PlannerPtr rrtc_planner(new og::RRTConnect(setup.getSpaceInformation()));
+
+	   rrtc_planner->as<og::RRTConnect>()->setRange(step_size);
+	   rrtc_planner->as<og::RRT>()->setGoalBias(goal_bias);
 	   setup.setPlanner(rrtc_planner);
 
 	   ob::PlannerStatus solved = setup.solve();
