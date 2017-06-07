@@ -6,4 +6,6 @@
 #include "planners/naivepp.h"
 #include "planners/scurve.h"
 #include "planners/errt.h"
+#include "planners/ompl_planner.h"
+
 #endif
