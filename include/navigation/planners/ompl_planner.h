@@ -48,8 +48,12 @@ namespace Navigation {
 			std::vector<krssg_ssl_msgs::obstacle> obstacles;
 
 			int botID;
+			
 			static const double step_size = 100.0;
 			static const double goal_bias = 0.08;
+
+			constexpr static double step_size = 0.5;
+
 			int numObstacles;
 	};
 }

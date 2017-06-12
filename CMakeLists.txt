@@ -5,6 +5,10 @@ project(navigation)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 
+SET("OpenCV_DIR" "/usr/local/share/OpenCV/")
+SET("OMPL_DIR" "/usr/local/share/ompl/")
+SET(CMAKE_CXX_FLAGS "-std=c++0x")
+
 list(APPEND CMAKE_PREFIX_PATH "$ENV{HOME}/catkin_ws/devel")
 execute_process (
   COMMAND bash -c "rosversion -d"
@@ -18,7 +22,6 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  robojackets
   genmsg
   OMPL
 )
