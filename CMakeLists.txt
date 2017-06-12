@@ -4,17 +4,30 @@ project(navigation)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+
+SET("OpenCV_DIR" "/usr/local/share/OpenCV/")
+SET("OMPL_DIR" "/usr/local/share/ompl/")
+SET(CMAKE_CXX_FLAGS "-std=c++0x")
+
+list(APPEND CMAKE_PREFIX_PATH "$ENV{HOME}/catkin_ws/devel")
+execute_process (
+  COMMAND bash -c "rosversion -d"
+  OUTPUT_VARIABLE ROS_VERSION)
+string(REGEX REPLACE "\n$" "" ROS_VERSION "${ROS_VERSION}")
+set(OMPL_DIR "/opt/ros/${ROS_VERSION}/share/ompl")
 find_package(catkin REQUIRED COMPONENTS
   krssg_ssl_msgs
+  geometry_msgs
   ssl_common
   roscpp
   rospy
   std_msgs
+  genmsg
+  OMPL
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -177,7 +190,8 @@ set(src
     src/planners/naivepp.cpp
     src/planners/errt.cpp
     src/planners/scurve.cpp
-    src/controllers/waypoint.cpp)
+    src/controllers/waypoint.cpp
+    src/planners/ompl_planner.cpp)
 
 add_library(navigation SHARED ${src})
 target_link_libraries(navigation ${catkin_LIBRARIES})
