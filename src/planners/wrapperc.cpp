@@ -1,4 +1,8 @@
 #include "planners/mergescurve.h"
+#include "krssg_ssl_msgs/path_data.h"
+#include "planners/ompl_planner.h"
+#include "geometry_msgs/Pose2D.h"
+
 #include <vector>
 
 /*
@@ -6,12 +10,22 @@
 		* vector<obstacle>
 		* Vector2D
 		* MergeSCurve
+		* OMPL_Planner
 */
 
 using namespace std;
 using namespace Navigation;
 
 extern "C"{
+
+	struct OrientedPoint{
+		float x, y, theta;
+	};
+
+	struct ListOrientedPoint{
+		OrientedPoint List[50];
+		int size;
+	};
 
 	vector<obstacle>* _vector_obstaclep_new(void){
 		return new vector<obstacle>();
@@ -47,25 +61,23 @@ extern "C"{
 		return mc->plan(initial, final, pt1, pt2, *obs, obstacle_count, current_id, teamBlue);
 	}
 
-		//Just in case Vector2D python fails
-	
-	/*Vector2D<int>* _Vector2D_new(void){
-		return new Vector2D<int>();
+	OMPL_Planner* _OMPL_Planner_new(krssg_ssl_msgs::path_data::Request &request){
+		return new OMPL_Planner(request);
 	}
-	void _Vector_2D_delete(Vector2D<int>* v){
-		delete v;
+	void _OMPL_Planner_delete(OMPL_Planner* ptr){
+		delete ptr;
 	}
-
-	void _Vector2D_set(Vector2D<int>* v, int x, int y){
-		v->x = x;
-		v->y = y;
+	ListOrientedPoint& _OMPL_Planner_plan(OMPL_Planner* ptr){
+		vector<geometry_msgs::Pose2D> response = (ptr->plan()).control_points;
+		ListOrientedPoint l;
+		l.size = 0;
+		assert(response.size() <= 50);
+		for(int i=0;i<response.size();i++){
+			l.List[i].x = response[i].x;
+			l.List[i].y = response[i].y;
+			l.List[i].theta = response[i].theta;
+			l.size ++;
+		}
+		return l;
 	}
-
-	int _Vector2D_getx(Vector2D<int>* v){
-		return v->x;
-	}
-
-	int _Vector2D_gety(Vector2D<int>* v){
-		return v->y;
-	}*/
 }

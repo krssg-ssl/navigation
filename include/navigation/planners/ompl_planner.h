@@ -52,7 +52,7 @@ namespace Navigation {
 			std::vector<krssg_ssl_msgs::obstacle> obstacles;
 
 			int botID;
-			static const double step_size = 0.5;
+			constexpr static double step_size = 0.5;
 			int numObstacles;
 	};
 }
