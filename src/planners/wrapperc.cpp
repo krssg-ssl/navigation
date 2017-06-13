@@ -27,6 +27,11 @@ extern "C"{
 		int size;
 	};
 
+	struct ListObstacle{
+		obstacle List[13];
+		int size;
+	};
+
 	vector<obstacle>* _vector_obstaclep_new(void){
 		return new vector<obstacle>();
 	}
@@ -61,7 +66,20 @@ extern "C"{
 		return mc->plan(initial, final, pt1, pt2, *obs, obstacle_count, current_id, teamBlue);
 	}
 
-	OMPL_Planner* _OMPL_Planner_new(krssg_ssl_msgs::path_data::Request &request){
+	OMPL_Planner* _OMPL_Planner_new(OrientedPoint botPos, OrientedPoint targetPos, ListObstacle obs_vec){
+		krssg_ssl_msgs::path_data::Request request;
+		request.botPos.x = botPos.x;
+		request.botPos.y = botPos.y;
+		request.botPos.theta = botPos.theta;
+		request.targetPos.x = targetPos.x;
+		request.targetPos.y = targetPos.y;
+		request.targetPos.theta = targetPos.theta;
+		for(int i=0;i<obs_vec.size;i++){
+			request.obs_vec[i].x = obs_vec.List[i].x;
+			request.obs_vec[i].y = obs_vec.List[i].y;
+			request.obs_vec[i].radius = obs_vec.List[i].radius;
+		}
+		request.obs_size = obs_vec.size;
 		return new OMPL_Planner(request);
 	}
 	void _OMPL_Planner_delete(OMPL_Planner* ptr){
