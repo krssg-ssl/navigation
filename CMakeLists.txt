@@ -7,7 +7,8 @@ project(navigation)
 
 SET("OpenCV_DIR" "/usr/local/share/OpenCV/")
 SET("OMPL_DIR" "/usr/local/share/ompl/")
-SET(CMAKE_CXX_FLAGS "-std=c++0x")
+SET(CMAKE_CXX_COMPILER /usr/bin/clang)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 list(APPEND CMAKE_PREFIX_PATH "$ENV{HOME}/catkin_ws/devel")
 execute_process (
