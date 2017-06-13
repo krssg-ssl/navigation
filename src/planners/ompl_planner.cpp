@@ -16,7 +16,6 @@ namespace Navigation {
 		start_point  = request.botPos;
 		final_point  = request.targetPos;
 		numObstacles = request.obs_size;
-		botID        = request.botID;
 
 		for(int obs=0; obs<numObstacles; ++obs) {
 			obstacles.push_back(request.obs_vec[obs]);
