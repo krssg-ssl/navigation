@@ -66,7 +66,8 @@ extern "C"{
 		return mc->plan(initial, final, pt1, pt2, *obs, obstacle_count, current_id, teamBlue);
 	}
 
-	OMPL_Planner* _OMPL_Planner_new(OrientedPoint botPos, OrientedPoint targetPos, ListObstacle obs_vec){
+	OMPL_Planner* _OMPL_Planner_new(OrientedPoint botPos, OrientedPoint targetPos, ListObstacle obs_ve){
+		
 		krssg_ssl_msgs::path_data::Request request;
 		request.botPos.x = botPos.x;
 		request.botPos.y = botPos.y;
@@ -74,28 +75,36 @@ extern "C"{
 		request.targetPos.x = targetPos.x;
 		request.targetPos.y = targetPos.y;
 		request.targetPos.theta = targetPos.theta;
-		for(int i=0;i<obs_vec.size;i++){
-			request.obs_vec[i].x = obs_vec.List[i].x;
-			request.obs_vec[i].y = obs_vec.List[i].y;
-			request.obs_vec[i].radius = obs_vec.List[i].radius;
+
+		//request.obs_vec = new obstacle[obs_ve.size];
+		for(int i=0;i<obs_ve.size;i++){
+			request.obs_vec[i].x = obs_ve.List[i].x;
+			request.obs_vec[i].y = obs_ve.List[i].y;
+			request.obs_vec[i].radius = obs_ve.List[i].radius;
 		}
-		request.obs_size = obs_vec.size;
-		return new OMPL_Planner(request);
+
+		
+		request.obs_size = obs_ve.size;
+		
+		return (new OMPL_Planner(request));
 	}
 	void _OMPL_Planner_delete(OMPL_Planner* ptr){
 		delete ptr;
 	}
-	ListOrientedPoint& _OMPL_Planner_plan(OMPL_Planner* ptr){
+	ListOrientedPoint _OMPL_Planner_plan(OMPL_Planner* ptr){
+		
 		vector<geometry_msgs::Pose2D> response = (ptr->plan()).control_points;
-		ListOrientedPoint l;
-		l.size = 0;
-		assert(response.size() <= 50);
-		for(int i=0;i<response.size();i++){
-			l.List[i].x = response[i].x;
-			l.List[i].y = response[i].y;
-			l.List[i].theta = response[i].theta;
-			l.size ++;
+		
+		std::shared_ptr<ListOrientedPoint> l(new ListOrientedPoint());
+		l->size = 0;
+		for(int i=0;i<min(int(response.size()),30);i++){
+			l->List[i].x = response[i].x;
+			l->List[i].y = response[i].y;
+			l->List[i].theta = response[i].theta;
+			l->size++;
+			std::cout << l->List[i].x << " " << l->List[i].y << std::endl;
 		}
-		return l;
+		cout<<" l returned "<<endl;
+		return *l;
 	}
 }
