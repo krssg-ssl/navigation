@@ -48,7 +48,9 @@ namespace Navigation {
 		space->as<ob::SE2StateSpace>()->setBounds(bounds);
 
 		og::SimpleSetup setup(space);
+		
 		setup.setStateValidityChecker(boost::bind(&OMPL_Planner::isStateValid, this, _1));
+		
 
 		ob::ScopedState<ob::SE2StateSpace> start(space);
 	  	start->setXY(start_point.x, start_point.y);
@@ -58,13 +60,18 @@ namespace Navigation {
 
 	  	setup.setStartAndGoalStates(start, final);
 
+		
 	  	ob::PlannerPtr rrtc_planner(new og::RRTConnect(setup.getSpaceInformation()));
+	  	// ob::PlannerPtr rrtc_planner(new og::RRTstar(setup.getSpaceInformation()));
+	  	
+	  	rrtc_planner->as<og::RRTConnect>()->setRange(step_size);
+	  	// rrtc_planner->as<og::RRTstar>()->setRange(step_size);
+	  	// rrtc_planner->as<og::RRTstar>()->setGoalBias(goal_bias);
+	  	
+	   
+       	        setup.setPlanner(rrtc_planner);
 
-	   rrtc_planner->as<og::RRTConnect>()->setRange(step_size);
-	   rrtc_planner->as<og::RRT>()->setGoalBias(goal_bias);
-	   setup.setPlanner(rrtc_planner);
-
-	   ob::PlannerStatus solved = setup.solve();
+	        ob::PlannerStatus solved = setup.solve();
 
 	   if (solved) {
 	   	ompl::geometric::PathGeometric final_path = setup.getSolutionPath();
@@ -72,17 +79,21 @@ namespace Navigation {
 	   	std::vector<ompl::base::State *> inter_states = final_path.getStates();
 
 	   	geometry_msgs::Pose2D temp_point;
+	   	int i=0;
+	   	response.control_points.resize(50);
 	   	for(std::vector<ompl::base::State *>::iterator itr =
-	   		inter_states.begin(); itr != inter_states.end(); ++itr) {
+	   		inter_states.begin(); itr != inter_states.end()&&i!=50; ++itr,i++) {
 	   		const ob::SE2StateSpace::StateType *inter_instance = (*itr)->as<ob::SE2StateSpace::StateType>();
 	   		temp_point.x = inter_instance->getX();
 	   		temp_point.y = inter_instance->getY();
-	   		response.control_points.push_back(temp_point);
+	   		response.control_points[i]=(temp_point);
 	   	}
 	   } else {
 	   	ROS_INFO("No path exists !");
 	   	response.control_points.resize(0);
 	   }
+	
+	   cout<<"Here4"<<response.control_points.size()<<endl;
 	   return response;
 	}
 }
